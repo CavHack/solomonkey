@@ -59,5 +59,48 @@ namespace DBUTILS {
 
   }
 
+  inline std::vector<std::string> get_list_field(const std::string &json, const std::string &key) {
+
+    auto key_pos = json.find(key);
+    auto quote_sign_pos_1 = json.find('\"', key_pos + 1);
+    auto quote_sign_pos_2 = json.find('[', quote_sign_pos_1 + 1);
+    auto quote_sign_pos_3 = json.find(']', quote_sign_pos_2 + 1);
+
+    return split(json.substr(quote_sign_pos_2 + 1, quote_sign_pos_3 - quote_sign_pos_2 - 1),
+		 ',');
 
 }
+
+  // pad '0' to the right of a string to make it 64-byte alignment
+  inline std::string right_padding_string(const std::string &str) {
+
+    std::string ret = str;
+    for (unsigned i = 0; i < 64 - (str.length() % 64); ++i) ret += '0';
+    return ret;
+    
+}
+
+  // if len(str) < 64, pad '0' to the left of it to make it 64-byte long
+  inline std::string left_padding_string(const std::string &str) {
+    if (str.length() < 64) {
+      std::string ret = str;
+      while (ret.length() != 64) ret = "0" + ret;
+      return ret;
+
+    } else {
+      return str;
+
+    }
+
+  }
+
+  inline std::string send_jsonrpc_request(const std::string &endpoint, 
+					  const std::string &request_header,
+					  const std::string &request_data) {
+
+    return RestClient::post(endpoint, request_header, request_data).body;
+  }
+
+} //DBUtils
+
+#endif 
