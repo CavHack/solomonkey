@@ -28,5 +28,24 @@ function get_max(block_num){
 
 	    });
 
+	var post_options = {
+	    hostname: 'localhost',
+	    port : '8545',
+	    method: 'POST',
+	    headers : {
+		'Content-Type' : 'application/json'
+	    }
+
+	};
+
+	var post_req = http.request(post_options, function(res) {
+		//console.log('STATUS:' + res.statusCode);
+		//console.log('HEADERS:' + JSON.stringify(res.headers));
+		res.setEncoding('utf8');
+		var body = '';
+		res.on('data', function(chunk) {})
+
+	    })
+
 
 }
